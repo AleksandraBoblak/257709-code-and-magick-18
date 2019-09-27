@@ -3,6 +3,7 @@
 var WIZARD_COUNT = 4;
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
+var HIDDEN_CLASS = 'hidden';
 var NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
 var LAST_NAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
 var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
@@ -16,12 +17,12 @@ var similarWizardTemplate = document.querySelector('#similar-wizard-template')
 .content
 .querySelector('.setup-similar-item');
 
-var setupOpen = document.querySelector('.setup-open');
-var setup = document.querySelector('.setup');
-var setupClose = setup.querySelector('.setup-close');
-var setupUserName = setup.querySelector('.setup-user-name');
-var setupSubmit = setup.querySelector('.setup-submit');
-var formElement = setup.querySelector('.setup-wizard-form');
+var setupOpenElement = document.querySelector('.setup-open');
+var setupElement = document.querySelector('.setup');
+var setupCloseElement = setupElement.querySelector('.setup-close');
+var setupUserNameElement = setupElement.querySelector('.setup-user-name');
+var setupSubmitElement = setupElement.querySelector('.setup-submit');
+var formElement = setupElement.querySelector('.setup-wizard-form');
 var wizardCoatElement = formElement.querySelector('.wizard-coat');
 var wizardEyesElement = formElement.querySelector('.wizard-eyes');
 var fireballWrapElement = formElement.querySelector('.setup-fireball-wrap');
@@ -68,7 +69,7 @@ var renderWizardsToDOM = function (wizards) {
 };
 
 var showSetupSimilar = function () {
-  userDialogElement.querySelector('.setup-similar').classList.remove('hidden');
+  userDialogElement.querySelector('.setup-similar').classList.remove(HIDDEN_CLASS);
 };
 
 var setRandomColor = function (element, colorsArray) {
@@ -89,12 +90,12 @@ var onPopupEscPress = function (evt) {
 };
 
 var openPopup = function () {
-  setup.classList.remove('hidden');
+  setupElement.classList.remove(HIDDEN_CLASS);
   document.addEventListener('keydown', onPopupEscPress);
 };
 
 var closePopup = function () {
-  setup.classList.add('hidden');
+  setupElement.classList.add(HIDDEN_CLASS);
   document.removeEventListener('keydown', onPopupEscPress);
 };
 
@@ -102,38 +103,38 @@ var submitForm = function () {
   formElement.submit();
 };
 
-setupOpen.addEventListener('click', function () {
+setupOpenElement.addEventListener('click', function () {
   openPopup();
 });
 
-setupOpen.addEventListener('keydown', function (evt) {
+setupOpenElement.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     openPopup();
   }
 });
 
-setupClose.addEventListener('click', function () {
+setupCloseElement.addEventListener('click', function () {
   closePopup();
 });
 
-setupClose.addEventListener('keydown', function (evt) {
+setupCloseElement.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     closePopup();
   }
 });
 
-setupUserName.addEventListener('keydown', function (evt) {
+setupUserNameElement.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
     evt.stopPropagation();
   }
 });
 
-setupSubmit.addEventListener('click', function () {
+setupSubmitElement.addEventListener('click', function () {
   submitForm();
 });
 
 
-setupSubmit.addEventListener('keydown', function (evt) {
+setupSubmitElement.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     submitForm();
   }

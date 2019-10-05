@@ -3,7 +3,7 @@
   var setupElement = document.querySelector('.setup');
   var setupOpenElement = document.querySelector('.setup-open');
   var setupCloseElement = setupElement.querySelector('.setup-close');
-  var dialogHandler = setupElement.querySelector('.upload');
+  var uploadElement = setupElement.querySelector('.upload');
 
   var onPopupEscPress = function (evt) {
     window.util.isEscEvent(evt, closePopup);
@@ -35,7 +35,7 @@
     window.util.isEnterEvent(evt, closePopup);
   });
 
-  dialogHandler.addEventListener('mousedown', function (evt) {
+  uploadElement.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
     var startCoords = {
@@ -72,9 +72,9 @@
       if (dragged) {
         var onClickPreventDefault = function (dragEvt) {
           dragEvt.preventDefault();
-          dialogHandler.removeEventListener('click', onClickPreventDefault);
+          uploadElement.removeEventListener('click', onClickPreventDefault);
         };
-        dialogHandler.addEventListener('click', onClickPreventDefault);
+        uploadElement.addEventListener('click', onClickPreventDefault);
       }
 
     };

@@ -49,14 +49,21 @@
     window.util.show(setupElement.querySelector('.setup-similar'));
   };
 
-  var successHandler = function (wizards) {
+  var loadSuccessHandler = function (wizards) {
     renderWizardsToDOM(wizards);
 
     setupElement.querySelector('.setup-similar').classList.remove('hidden');
+
+    if (document.querySelector('.error-message')) {
+      document.querySelector('.error-message').remove();
+    }
   };
 
-  var loadSuccess = function () {
+  var saveSuccessHandler = function () {
     window.dialog.closePopup();
+    if (document.querySelector('.error-message')) {
+      document.querySelector('.error-message').remove();
+    }
   };
 
   var errorHandler = function (errorMessage) {
@@ -66,18 +73,19 @@
     node.style.left = 0;
     node.style.right = 0;
     node.style.fontSize = '30px';
+    node.classList.add('error-message');
 
     node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
   var init = function () {
-    window.backend.load(successHandler, errorHandler);
+    window.backend.load(loadSuccessHandler, errorHandler);
     showSetupSimilar();
   };
 
   var submitForm = function () {
-    window.backend.save(new FormData(formElement), loadSuccess, errorHandler);
+    window.backend.save(new FormData(formElement), saveSuccessHandler, errorHandler);
   };
 
   init();

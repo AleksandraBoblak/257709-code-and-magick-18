@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var dataURL = 'https://js.dump.academy/code-and-magick/data';
+  var DATA_URL = 'https://js.dump.academy/code-and-magick/data';
 
   var load = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
@@ -26,11 +26,11 @@
 
     xhr.timeout = 10000;
 
-    xhr.open('GET', dataURL);
+    xhr.open('GET', DATA_URL);
     xhr.send();
   };
 
-  var postURL = 'https://js.dump.academy/code-and-magick';
+  var POST_URL = 'https://js.dump.academy/code-and-magick';
 
   var save = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
@@ -48,7 +48,7 @@
       onError('Произошла ошибка соединения');
     });
 
-    xhr.open('POST', postURL);
+    xhr.open('POST', POST_URL);
     xhr.send(data);
   };
 

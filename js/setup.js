@@ -1,8 +1,7 @@
 'use strict';
 (function () {
   var WIZARD_COUNT = 4;
-  var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
-  var EYE_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
+
   var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 
   var similarListElement = document.querySelector('.setup-similar-list');
@@ -14,17 +13,17 @@
   var setupUserNameElement = setupElement.querySelector('.setup-user-name');
   var setupSubmitElement = setupElement.querySelector('.setup-submit');
   var formElement = setupElement.querySelector('.setup-wizard-form');
-  var wizardCoatElement = formElement.querySelector('.wizard-coat');
-  var wizardEyesElement = formElement.querySelector('.wizard-eyes');
+  //  var wizardCoatElement = formElement.querySelector('.wizard-coat');
+  //  var wizardEyesElement = formElement.querySelector('.wizard-eyes');
   var fireballWrapElement = formElement.querySelector('.setup-fireball-wrap');
   var fireballInputElement = fireballWrapElement.querySelector('input[name="fireball-color"]');
 
+  var coatColor;
+  var eyesColor;
+  var wizards = [];
+
   var getRandomElement = function (array) {
     return array[Math.floor(Math.random() * array.length)];
-  };
-
-  var setRandomColor = function (element, colorsArray) {
-    element.style.fill = getRandomElement(colorsArray);
   };
 
   var renderWizard = function (wizard) {
@@ -37,10 +36,13 @@
     return wizardElement;
   };
 
-  var renderWizardsToDOM = function (wizards) {
+  var renderWizardsToDOM = function (wizardsArray) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < WIZARD_COUNT; i++) {
-      fragment.appendChild(renderWizard(wizards[i]));
+      fragment.appendChild(renderWizard(wizardsArray[i]));
+    }
+    while (similarListElement.children[0]) {
+      similarListElement.children[0].remove();
     }
     similarListElement.appendChild(fragment);
   };
@@ -49,8 +51,9 @@
     window.util.show(setupElement.querySelector('.setup-similar'));
   };
 
-  var loadSuccessHandler = function (wizards) {
-    renderWizardsToDOM(wizards);
+  var loadSuccessHandler = function (data) {
+    wizards = data;
+    updateWizards();
 
     setupElement.querySelector('.setup-similar').classList.remove('hidden');
 
@@ -88,6 +91,49 @@
     window.backend.save(new FormData(formElement), saveSuccessHandler, errorHandler);
   };
 
+  var getRank = function (wizard) {
+    var rank = 0;
+
+    if (wizard.colorCoat === coatColor) {
+      rank += 2;
+    }
+    if (wizard.colorEyes === eyesColor) {
+      rank += 1;
+    }
+
+    return rank;
+  };
+
+  var namesComparator = function (left, right) {
+    if (left > right) {
+      return 1;
+    } else if (left < right) {
+      return -1;
+    } else {
+      return 0;
+    }
+  };
+
+  var updateWizards = function () {
+    renderWizardsToDOM(wizards.sort(function (left, right) {
+      var rankDiff = getRank(right) - getRank(left);
+      if (rankDiff === 0) {
+        rankDiff = namesComparator(left.name, right.name);
+      }
+      return rankDiff;
+    }));
+  };
+
+  window.wizard.onEyesChange = window.debounce(function (color) {
+    eyesColor = color;
+    updateWizards();
+  });
+
+  window.wizard.onCoatChange = window.debounce(function (color) {
+    coatColor = color;
+    updateWizards();
+  });
+
   init();
 
   setupUserNameElement.addEventListener('keydown', function (evt) {
@@ -100,14 +146,6 @@
     window.util.isEnterEvent(evt, submitForm);
   });
 
-  wizardCoatElement.addEventListener('click', function () {
-    setRandomColor(wizardCoatElement, COAT_COLORS);
-  });
-
-  wizardEyesElement.addEventListener('click', function () {
-    setRandomColor(wizardEyesElement, EYE_COLORS);
-  });
-
   fireballWrapElement.addEventListener('click', function () {
     var fireballColor = getRandomElement(FIREBALL_COLORS);
     fireballWrapElement.style.backgroundColor = fireballColor;
@@ -118,5 +156,4 @@
     submitForm();
     evt.preventDefault();
   });
-
 })();

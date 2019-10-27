@@ -13,8 +13,6 @@
   var setupUserNameElement = setupElement.querySelector('.setup-user-name');
   var setupSubmitElement = setupElement.querySelector('.setup-submit');
   var formElement = setupElement.querySelector('.setup-wizard-form');
-  //  var wizardCoatElement = formElement.querySelector('.wizard-coat');
-  //  var wizardEyesElement = formElement.querySelector('.wizard-eyes');
   var fireballWrapElement = formElement.querySelector('.setup-fireball-wrap');
   var fireballInputElement = fireballWrapElement.querySelector('input[name="fireball-color"]');
 
@@ -36,14 +34,18 @@
     return wizardElement;
   };
 
+  var clearSimilarList = function () {
+    while (similarListElement.children[0]) {
+      similarListElement.children[0].remove();
+    }
+  };
+
   var renderWizardsToDOM = function (wizardsArray) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < WIZARD_COUNT; i++) {
       fragment.appendChild(renderWizard(wizardsArray[i]));
     }
-    while (similarListElement.children[0]) {
-      similarListElement.children[0].remove();
-    }
+    clearSimilarList();
     similarListElement.appendChild(fragment);
   };
 

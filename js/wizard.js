@@ -8,10 +8,7 @@
   var wizardCoatElement = formElement.querySelector('.wizard-coat');
   var wizardEyesElement = formElement.querySelector('.wizard-eyes');
 
-  var wizard = {
-    onEyesChange: function (color) {},
-    onCoatChange: function (color) {}
-  };
+  var wizard = {};
 
   var getRandomElement = function (array) {
     return array[Math.floor(Math.random() * array.length)];
